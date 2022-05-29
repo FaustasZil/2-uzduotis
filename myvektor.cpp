@@ -28,11 +28,6 @@ public:
 	myVector& operator=(const myVector&);
 	~myVector() { uncreate(); } 
 
-	void push_back(const T& val) {
-		if (avail == limit)
-			grow();
-		unchecked_append(val);
-	}
 
 	//element access
 
@@ -75,6 +70,65 @@ public:
 	}
 	void shrink_to_fit() {
 		limit = avail;
+	}
+
+	//modifiers
+
+	void push_back(const T& val) {
+		if (avail == limit)
+			grow();
+		unchecked_append(val);
+	}
+
+	void clear() {
+		avail = data;
+	}
+
+	void insert(int b, const T& val) {
+		int i;
+		for (i = size(); i > b; i--)
+			data[i] = data[i - 1];
+		data[i] = val;
+		avail++;
+	}
+
+	void insert(int b, int n, const T& val) {
+		for (int i = 0; i < n; i++)
+			insert(b + i, val);
+	}
+
+	void insert(int b, const T val[]) {
+		for (int i = 0; i < (sizeof(val) / sizeof(T))+1; i++)
+			insert(b + i, val[i]);
+	}
+
+	void erase(int b) {
+		for (int i = b; i < size(); ++i)
+			data[i] = data[i + 1];
+		avail--;
+	}
+
+	void erase(int from, int to) {
+		for (int i = from; i < to; i++)
+			erase(from);
+	}
+
+	void pop_back() {
+		erase(size() - 1);
+	}
+
+	void resize(int b, const T& val) {
+		int temp = size();
+		if (size() < b) {
+			for (int i = 0; i < b - temp; i++) {
+				push_back(val);
+			}
+		}
+		else if (size() > b) {
+			for (int i = 0; i < temp - b; i++) {
+				pop_back();
+			}
+		}
 	}
 private:
 	iterator data;
