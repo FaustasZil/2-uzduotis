@@ -18,17 +18,15 @@ public:
 
 	myVector() { create(); }
 	explicit myVector(size_type n, const T& val = T{}) { create(n, val); }
+	myVector(const myVector& v) { create(v.begin(), v.end()); }
 
 	size_type size() const { return avail - data; }
-	T& operator[](size_type i) { return data[i]; }
-	const T& operator[](size_type i) const { return data[i]; }
 
 	iterator begin() { return data; }
 	const_iterator begin() const { return data; } 
 	iterator end() { return avail; } 
 	const_iterator end() const { return avail; } 
 
-	myVector(const myVector& v) { create(v.begin(), v.end()); }
 	myVector& operator=(const myVector&);
 	~myVector() { uncreate(); } 
 
@@ -38,6 +36,28 @@ public:
 		unchecked_append(val);
 	}
 
+	//element access
+
+	T& at(int index) {
+		if (index < 0 || size() <= index) throw std::out_of_range("Indeksas yra out of range");
+		return data[index];
+	}
+	const T& at(int index) const {
+		if (index < 0 || size() <= index) throw std::out_of_range("Indeksas yra out of range");
+		return data[index];
+	}
+
+	T& operator[](size_type i) { return data[i]; }
+	const T& operator[](size_type i) const { return data[i]; }
+
+	T& front() { return data[0]; }
+	const T& front() const { return data[0]; }
+
+	T& back() { return data[size()-1]; }
+	const T& back() const { return data[size()-1]; }
+
+	T& data() { return data; }
+	const T& data() const { return data; }
 
 private:
 	iterator data;
