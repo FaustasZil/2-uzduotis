@@ -156,7 +156,7 @@ void Studentas::skaiciuoti(std::stringstream& sstemp, int& ndskcc) {
 		median_ = (vpaz_[(ndskcc / 2) - 1] + vpaz_[ndskcc / 2]) / 2.0;
 }
 
-void fisvestis(std::vector <Studentas> temp, int vm, string vardas) {
+void fisvestis(myVector <Studentas> temp, int vm, string vardas) {
 	std::ofstream open_f(vardas);
 	open_f << std::endl << "|" << std::left << std::setw(20) << "Vardas" << "|" << std::left << std::setw(20) << "Pavarde" << "|";
 	std::stringstream rasbufferis;
@@ -208,7 +208,7 @@ void fgeneravimas(int ndskc, int dydis) {
 	cout << "Uztruko " << diff.count() << "s" << std::endl;
 	//baigt skaiciuot
 }
-void apskaiciavimas(std::vector <Studentas>& amas, std::vector <string>& ndskcc, int dydis) {
+void apskaiciavimas(myVector <Studentas>& amas, myVector <string>& ndskcc, int dydis) {
 	//pradet skaiciuot
 	std::stringstream bufferis;
 	std::stringstream sstemp;
@@ -254,10 +254,10 @@ void apskaiciavimas(std::vector <Studentas>& amas, std::vector <string>& ndskcc,
 	//baigt skaiciuot
 }
 
-std::vector<Studentas> padalinimas(std::vector <Studentas>& amas, int krit) {
+myVector<Studentas> padalinimas(myVector <Studentas>& amas, int krit) {
 	//pradet skaiciuot
-	std::vector<Studentas> temp;
-	std::vector<Studentas> nelaimingi;
+	myVector<Studentas> temp;
+	myVector<Studentas> nelaimingi;
 	if (krit == 0) {
 		for (auto i : amas) {
 			if (i.vidurkis() * 0.4 + i.egz() * 0.6 < 5.0)

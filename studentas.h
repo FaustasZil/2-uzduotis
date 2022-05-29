@@ -8,6 +8,7 @@
 #include <fstream>
 #include <sstream>
 #include <chrono>
+#include "myvektor.cpp"
 class zmogus {
 protected:
 	std::string vardas_;
@@ -37,10 +38,10 @@ public:
 };
 //void ivestis(zmogus& temp);
 //void isvestis(zmogus& temp, int vm);
-void fisvestis(std::vector <Studentas> temp, int vm, std::string vardas);
+void fisvestis(myVector <Studentas> temp, int vm, std::string vardas);
 bool sortf(Studentas pirmas, Studentas antras);
 void fgeneravimas(int ndskc, int dydis);
-void apskaiciavimas(std::vector <Studentas>& amas, std::vector <std::string>& ndskcc, int dydis);
-std::vector<Studentas> padalinimas(std::vector <Studentas>& amas, int krit);
+void apskaiciavimas(myVector <Studentas>& amas, myVector <std::string>& ndskcc, int dydis);
+myVector<Studentas> padalinimas(myVector <Studentas>& amas, int krit);
 
 
