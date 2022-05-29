@@ -20,8 +20,6 @@ public:
 	explicit myVector(size_type n, const T& val = T{}) { create(n, val); }
 	myVector(const myVector& v) { create(v.begin(), v.end()); }
 
-	size_type size() const { return avail - data; }
-
 	iterator begin() { return data; }
 	const_iterator begin() const { return data; } 
 	iterator end() { return avail; } 
@@ -47,8 +45,12 @@ public:
 		return data[index];
 	}
 
-	T& operator[](size_type i) { return data[i]; }
-	const T& operator[](size_type i) const { return data[i]; }
+	T& operator[](size_type i) {
+		if (i < 0 || size() <= i) throw std::out_of_range("Indeksas yra out of range");
+		return data[i]; }
+	const T& operator[](size_type i) const {
+		if (i < 0 || size() <= i) throw std::out_of_range("Indeksas yra out of range");
+		return data[i]; }
 
 	T& front() { return data[0]; }
 	const T& front() const { return data[0]; }
@@ -56,15 +58,30 @@ public:
 	T& back() { return data[size()-1]; }
 	const T& back() const { return data[size()-1]; }
 
-	T& data() { return data; }
-	const T& data() const { return data; }
+	T& value() { return data; }
+	const T& value() const { return data; }
 
+	//capacity
+
+	bool is_empty() const { return size() == 0; }
+
+	size_type size() const { return avail - data; }
+	size_type max_size() const { return std::numeric_limits<size_type>::max() / sizeof(T); }
+
+	size_type capacity() const { return size() + limit-avail; }
+
+	void reserve(size_t new_limit) {
+		limit += new_limit;
+	}
+	void shrink_to_fit() {
+		limit = avail;
+	}
 private:
 	iterator data;
 	iterator avail;
 	iterator limit;
 
-	allocator<T> alloc;
+	std::allocator<T> alloc;
 
 	void create();
 	void create(size_type, const T&);
@@ -93,12 +110,12 @@ template <class T>
 void myVector<T>::create(size_type n, const T& val) {
 	data = alloc.allocate(n); 
 	limit = avail = data + n; 
-	uninitialized_fill(data, limit, val); 
+	std::uninitialized_fill(data, limit, val); 
 }
 template <class T>
 void myVector<T>::create(const_iterator i, const_iterator j) {
 	data = alloc.allocate(j - i); 
-	limit = avail = uninitialized_copy(i, j, data); 
+	limit = avail = std::uninitialized_copy(i, j, data); 
 }
 
 template <class T> 
@@ -114,9 +131,9 @@ void myVector<T>::uncreate() {
 
 template <class T> 
 void myVector<T>::grow() {
-	size_type new_size = max(2 * (limit - data), ptrdiff_t(1));
+	size_type new_size = std::max(2 * (limit - data), ptrdiff_t(1));
 	iterator new_data = alloc.allocate(new_size);
-	iterator new_avail = uninitialized_copy(data, avail, new_data);
+	iterator new_avail = std::uninitialized_copy(data, avail, new_data);
 	uncreate();
 	data = new_data;
 	avail = new_avail;
